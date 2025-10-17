@@ -35,7 +35,6 @@ final class MicroPostController extends AbstractController
     {
         $form = $this->createForm(MicroPostType::class, new MicroPost());
 
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
