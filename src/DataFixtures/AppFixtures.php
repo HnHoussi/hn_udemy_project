@@ -39,18 +39,21 @@ class AppFixtures extends Fixture
          $microPost1->setTitle('Welcome to Tunisia!');
          $microPost1->setText('It is in north Africa');
          $microPost1->setCreated(new DateTime());
+         $microPost1->setAuthor($user2);
          $manager->persist($microPost1);
 
          $microPost2 = new MicroPost();
          $microPost2->setTitle('Welcome to France!');
          $microPost2->setText('It is in Europe');
          $microPost2->setCreated(new DateTime());
+         $microPost2->setAuthor($user1);
          $manager->persist($microPost2);
 
          $microPost3 = new MicroPost();
          $microPost3->setTitle('Welcome to Spain!');
          $microPost3->setText('It is in Europe');
          $microPost3->setCreated(new DateTime());
+         $microPost3->setAuthor($user1);
          $manager->persist($microPost3);
 
         $manager->flush();
