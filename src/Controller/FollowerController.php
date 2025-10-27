@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,12 +13,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class FollowerController extends AbstractController
 {
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException
-     */
     #[Route('/follow/{id}', name: 'app_follow')]
-    public function follow(User $userToFollow, Request $request, EntityManager $entityManager): Response
+    public function follow(User $userToFollow, Request $request, EntityManagerInterface $entityManager): Response
     {
         /** @var User $currentUser */
         $currentUser = $this->getUser();
@@ -32,12 +28,8 @@ final class FollowerController extends AbstractController
 
     }
 
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException
-     */
     #[Route('/unfollow/{id}', name: 'app_unfollow')]
-    public function unfollow(User $userToUnfollow, Request $request, EntityManager $entityManager): Response
+    public function unfollow(User $userToUnfollow, Request $request, EntityManagerInterface $entityManager): Response
     {
         /** @var User $currentUser */
         $currentUser = $this->getUser();

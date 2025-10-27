@@ -72,7 +72,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, self>
      */
     #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'follows')]
-    #[ORM\JoinTable('followers')]
     private Collection $followers;
 
     public function __construct()

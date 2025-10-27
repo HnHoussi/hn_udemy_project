@@ -5,9 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\UserProfile;
 use App\Form\UserProfileType;
-use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,18 +14,18 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class SettingsProfileController extends AbstractController
 {
-    /**
-     * @throws ORMException
-     */
+
     #[Route('/settings/profile', name: 'app_settings_profile')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function profile(Request $request, EntityManager $entityManager): Response
+    public function profile(Request $request, EntityManagerInterface $entityManager): Response
     {
         /** @var User $user */
         $user = $this->getUser();
         $userProfile = $user->getUserProfile() ?? new UserProfile();
 
         $form = $this->createForm(UserProfileType::class, $userProfile);
+
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $userProfile = $form->getData();
