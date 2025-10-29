@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class MicroPostVoter extends Voter
 {
-    public function __construct(private Security $security)
+    public function __construct(private readonly Security $security)
     {
     }
     protected function supports(string $attribute, mixed $subject): bool
@@ -19,13 +19,13 @@ final class MicroPostVoter extends Voter
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
         return in_array($attribute, [MicroPost::EDIT, MicroPost::VIEW])
-            && $subject instanceof \App\Entity\MicroPost;
+            && $subject instanceof MicroPost;
     }
 
     /**
      * @param MicroPost $subject
      */
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var  User $user */
         $user = $token->getUser();
@@ -50,7 +50,14 @@ final class MicroPostVoter extends Voter
                     );
 
             case MicroPost::VIEW:
-                return true;
+                if (!$subject->isExtraPrivacy()) {
+                    return true;
+                }
+
+                return $isAuth &&
+                    ($subject->getAuthor()->getId() === $user->getId()
+                        || $subject->getAuthor()->getFollows()->contains($user)
+                    );
         }
 
         return false;
